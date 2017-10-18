@@ -1,0 +1,35 @@
+{
+  "name": "statsd-newrelic-infra-backend",
+  "version": "1.0.0",
+  "description": "New Relic Infrastructure backend for StatsD",
+  "main": "lib/newrelic-infra.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "keywords": [
+    "newrelic",
+    "statsd",
+    "metrics",
+    "infrastructure"
+  ],
+  "author": "New Relic Infrastructure team",
+  "contributors": [
+    {
+      "name": "Toni Reina <treina@newrelic.com>",
+      "web": "https://github.com/areina"
+    }
+  ],
+  "license": {
+    "type": "propietary",
+    "url": ""
+  },
+  "engines": {
+    "node": ">=0.8"
+  },
+  "dependencies": {
+    "mocha": "^3.5.0"
+  },
+  "devDependencies": {
+    "mocha": "^3.5.0"
+  }
+}
