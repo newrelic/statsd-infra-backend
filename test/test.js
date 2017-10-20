@@ -126,5 +126,47 @@ describe('New Relic Infrastructure StatsD Backend', function() {
       assert.equal(httpserver.isDone(), false);
       nock.cleanAll();
     });
+
+    it('limit of keys exceeded', function(done) {
+      const emitter = new events.EventEmitter();
+      const config = Object.assign({}, defaultConfig);
+      const metricsLimit = 2;
+      config.newrelic.rules = [{
+        matchExpression: '.*redis.*',
+        metricSchema: '{app}.{service}.{metricName}',
+        entityType: 'Redis Cluster',
+        entityName: 'Production Host1',
+        eventType: 'RedisSample'
+      }];
+      config.newrelic.metrics_limit = metricsLimit;
+      const metrics = {
+        gauges: { 'myapp.redis.my_gauge': 1 },
+        counters: { 'myapp.redis.my_counter': 10},
+        counter_rates: { 'myapp.redis.my_counter': 1},
+        timer_data: {
+          'myapp.redis.my_timer': {
+            sum: 10,
+            mean: 10
+          }
+        }
+      };
+      const expected = defaultIntegration;
+      expected.data[0] = Object.assign(
+        {},
+        expected.data[0],
+        {
+          entity: { name: 'Production Host1', type: 'Redis Cluster'},
+          metrics: [{event_type: 'StatsdLimitErrorSample', numberOfMetrics: 7, configuredLimit: metricsLimit}]
+        });
+      const httpserver = nock('http://localhost:9070')
+            .post('/data')
+            .reply(204, function(uri, requestBody) {
+              assert.deepEqual(requestBody, expected);
+              done();
+            });
+      nri.init(null, config, emitter, util);
+      emitter.emit('flush', timestamp, metrics);
+      assert.equal(httpserver.isDone(), true);
+    });
   });
 });
