@@ -138,7 +138,7 @@ describe('New Relic Infrastructure StatsD Backend', function() {
         entityName: 'Production Host1',
         eventType: 'RedisSample'
       }];
-      config.newrelic.metrics_limit = metricsLimit;
+      config.newrelic.metricsLimit = metricsLimit;
       const metrics = {
         gauges: { 'myapp.redis.my_gauge': 1 },
         counters: { 'myapp.redis.my_counter': 10},
