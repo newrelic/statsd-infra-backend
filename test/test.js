@@ -53,7 +53,7 @@ describe('New Relic Infrastructure StatsD Backend', function() {
         counter_rates: { my_counter: 1}
       };
       const httpserver = nock('http://localhost:9070')
-        .post('/data')
+        .post('/v1/data')
         .reply(204);
 
       nri.init(null, config, emitter, util);
@@ -93,7 +93,7 @@ describe('New Relic Infrastructure StatsD Backend', function() {
         });
 
       const httpserver = nock('http://localhost:9070')
-        .post('/data')
+        .post('/v1/data')
         .reply(204, function(uri, requestBody) {
           assert.deepEqual(requestBody, expected);
           done();
@@ -118,7 +118,7 @@ describe('New Relic Infrastructure StatsD Backend', function() {
         gauges: { 'redis.my_gauge': 1 }
       };
       const httpserver = nock('http://localhost:9070')
-        .post('/data')
+        .post('/v1/data')
         .reply(204);
 
       nri.init(null, config, emitter, util);
@@ -159,7 +159,7 @@ describe('New Relic Infrastructure StatsD Backend', function() {
           metrics: [{event_type: 'StatsdLimitErrorSample', numberOfMetrics: 7, configuredLimit: metricsLimit}]
         });
       const httpserver = nock('http://localhost:9070')
-            .post('/data')
+            .post('/v1/data')
             .reply(204, function(uri, requestBody) {
               assert.deepEqual(requestBody, expected);
               done();
