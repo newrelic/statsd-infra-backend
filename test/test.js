@@ -25,12 +25,10 @@ describe('New Relic Infrastructure StatsD Backend', function() {
   const defaultIntegration = {
     name: 'com.newrelic.statsd',
     integration_version: '0.1.0',
-    protocol_version: '2',
-    data: [{
-      metrics: [],
-      inventory: {},
-      events: []
-    }]
+    protocol_version: '1',
+    metrics: [],
+    inventory: {},
+    events: []
   };
 
   describe('nriInitBackend', function() {
@@ -84,13 +82,7 @@ describe('New Relic Infrastructure StatsD Backend', function() {
         }
       };
       const expected = defaultIntegration;
-      expected.data[0] = Object.assign(
-        {},
-        expected.data[0],
-        {
-          entity: { name: 'Production Host1', type: 'Redis Cluster'},
-          metrics: [{event_type: 'RedisSample', app: 'myapp', service: 'redis', 'my_gauge': 1, 'my_counter': 10, 'my_counterPerSecond': 1, 'my_timer.sum': 10, 'my_timer.mean': 10}]
-        });
+      expected.metrics = [{event_type: 'RedisSample', app: 'myapp', service: 'redis', 'my_gauge': 1, 'my_counter': 10, 'my_counterPerSecond': 1, 'my_timer.sum': 10, 'my_timer.mean': 10}];
 
       const httpserver = nock('http://localhost:9070')
         .post('/v1/data')
@@ -151,13 +143,7 @@ describe('New Relic Infrastructure StatsD Backend', function() {
         }
       };
       const expected = defaultIntegration;
-      expected.data[0] = Object.assign(
-        {},
-        expected.data[0],
-        {
-          entity: { name: 'Production Host1', type: 'Redis Cluster'},
-          metrics: [{event_type: 'StatsdLimitErrorSample', numberOfMetrics: 7, configuredLimit: metricsLimit}]
-        });
+      expected.metrics = [{event_type: 'StatsdLimitErrorSample', numberOfMetrics: 7, configuredLimit: metricsLimit}];
       const httpserver = nock('http://localhost:9070')
             .post('/v1/data')
             .reply(204, function(uri, requestBody) {
