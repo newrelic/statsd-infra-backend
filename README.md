@@ -33,8 +33,6 @@ StatsD backend for sending metrics to New Relic Infrastructure
         {
           matchExpression: "myapp.*redis.*",
           metricSchema: "{app}.{environment}.{service}.{serviceName}.{metricName}",
-          entityName: "{app}-{environment}",
-          entityType: "Redis Cluster",
           eventType: "RedisStatsdSample",
           labels: {
             role: "cache",
