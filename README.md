@@ -5,7 +5,7 @@ StatsD backend for sending metrics to New Relic Infrastructure
 ## Requirements
 
 * StatsD versions >= 0.3.0.
-* New Relic Infrastructure Agent
+* New Relic Infrastructure Agent >= v1.0.818
 
 ## Installation
 
