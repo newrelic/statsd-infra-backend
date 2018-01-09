@@ -11,16 +11,16 @@ StatsD backend for sending metrics to New Relic Infrastructure
 
 ```sh
     $ cd /path/to/statsd
-    $ npm install statsd-newrelic-infra-backend
+    $ npm install @newrelic/statsd-infra-backend
 ```
 
 ## Enabling
 
-1. Add `statsd-newrelic-infra-backend` backend to the list of StatsD backends in the StatsD configuration file.
+1. Add `@newrelic/statsd-infra-backend` backend to the list of StatsD backends in the StatsD configuration file.
 
 ```js
 {
-    backends: ["statsd-newrelic-infra-backend"],
+    backends: ["@newrelic/statsd-infra-backend"],
 }
 ```
 
