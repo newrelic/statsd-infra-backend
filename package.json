@@ -1,5 +1,5 @@
 {
-  "name": "statsd-newrelic-infra-backend",
+  "name": "@newrelic/statsd-infra-backend",
   "version": "1.0.0",
   "description": "New Relic Infrastructure backend for StatsD",
   "main": "lib/newrelic-infra.js",
@@ -21,12 +21,12 @@
   ],
   "license": {
     "type": "propietary",
-    "url": ""
+    "url": "https://raw.github.com/newrelic/statsd-infra-backend/master/LICENSE"
   },
   "engines": {
-    "node": ">=0.8"
+    "node": ">=0.10"
   },
-  "dependencies": {
+  "devDependencies": {
     "mocha": "^3.5.0"
   }
 }
