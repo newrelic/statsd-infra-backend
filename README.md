@@ -28,7 +28,7 @@ StatsD backend for sending metrics to New Relic Infrastructure
 
 ```js
     newrelic: {
-      port: 5001,
+      port: 8001,
       rules: [
         {
           matchExpression: "myapp.*redis.*",
