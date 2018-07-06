@@ -1,6 +1,6 @@
 {
   "name": "@newrelic/statsd-infra-backend",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "New Relic Infrastructure backend for StatsD",
   "main": "lib/newrelic-infra.js",
   "scripts": {
