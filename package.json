@@ -6,6 +6,10 @@
   "scripts": {
     "test": "mocha"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/newrelic/statsd-infra-backend.git"
+  },
   "keywords": [
     "newrelic",
     "statsd",
@@ -19,14 +23,12 @@
       "web": "https://github.com/areina"
     }
   ],
-  "license": {
-    "type": "propietary",
-    "url": "https://raw.github.com/newrelic/statsd-infra-backend/master/LICENSE"
-  },
+  "license": "SEE LICENSE IN LICENSE",
   "engines": {
     "node": ">=0.10"
   },
   "devDependencies": {
-    "mocha": "^3.5.0"
+    "mocha": "^5.2.0",
+    "nock": "^9.4.1"
   }
 }
