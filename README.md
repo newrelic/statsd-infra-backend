@@ -57,6 +57,14 @@ New Relic Infrastructure account.
 - Push the code to your fork
 - Send a Pull Request
 
+## Release
+
+- Update the `CHANGELOG.md` file with all the info about the new release.
+- Run `npm run release`. Check
+  [this](https://github.com/conventional-changelog/standard-version#release-as-a-target-type-imperatively-like-npm-version)
+  too see all the different options for this command.
+- Run `git push --follow-tags origin master && npm publish` to publish the package
+
 ## License
 
 New Relic Infrastructure Backend for StatsD is free-to-use, proprietary
