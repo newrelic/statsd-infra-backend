@@ -4,7 +4,8 @@
   "description": "New Relic Infrastructure backend for StatsD",
   "main": "lib/newrelic-infra.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "release": "standard-version -m 'Release v%s'"
   },
   "repository": {
     "type": "git",
@@ -29,6 +30,12 @@
   },
   "devDependencies": {
     "mocha": "^5.2.0",
-    "nock": "^9.4.1"
+    "nock": "^9.4.1",
+    "standard-version": "^4.4.0"
+  },
+  "standard-version": {
+    "skip": {
+      "changelog": true
+    }
   }
 }
