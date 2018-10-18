@@ -83,16 +83,34 @@ describe('New Relic Infrastructure StatsD Backend', function () {
         }
       };
       const expected = defaultIntegration;
-      expected.metrics = [{
-        event_type: 'RedisSample',
-        app: 'myapp',
-        service: 'redis',
-        'my_gauge': 1,
-        'my_counter': 10,
-        'my_counterPerSecond': 1,
-        'my_timer.sum': 10,
-        'my_timer.mean': 10
-      }];
+      expected.metrics = [
+        {
+          "app": "myapp",
+          "event_type": "RedisSample",
+          "my_counter": 10,
+          "service": "redis"
+        }, {
+          "app": "myapp",
+          "event_type": "RedisSample",
+          "my_counterPerSecond": 1,
+          "service": "redis"
+        }, {
+          "app": "myapp",
+          "event_type": "RedisSample",
+          "my_timer.sum": 10,
+          "service": "redis"
+        }, {
+          "app": "myapp",
+          "event_type": "RedisSample",
+          "my_timer.mean": 10,
+          "service": "redis"
+        }, {
+          "app": "myapp",
+          "event_type": "RedisSample",
+          "my_gauge": 1,
+          "service": "redis"
+        }
+      ];
 
       const httpserver = nock('http://localhost:9070')
         .post('/v1/data')
@@ -129,42 +147,6 @@ describe('New Relic Infrastructure StatsD Backend', function () {
       nock.cleanAll();
     });
 
-    it('limit of keys exceeded', function (done) {
-      const emitter = new events.EventEmitter();
-      const config = Object.assign({}, defaultConfig);
-      const metricsLimit = 2;
-      config.newrelic.rules = [{
-        matchExpression: '.*redis.*',
-        metricSchema: '{app}.{service}.{metricName}',
-        entityType: 'Redis Cluster',
-        entityName: 'Production Host1',
-        eventType: 'RedisSample'
-      }];
-      config.newrelic.metricsLimit = metricsLimit;
-      const metrics = {
-        gauges: {'myapp.redis.my_gauge': 1},
-        counters: {'myapp.redis.my_counter': 10},
-        counter_rates: {'myapp.redis.my_counter': 1},
-        timer_data: {
-          'myapp.redis.my_timer': {
-            sum: 10,
-            mean: 10
-          }
-        }
-      };
-      const expected = defaultIntegration;
-      expected.metrics = [{event_type: 'StatsdLimitErrorSample', numberOfMetrics: 7, configuredLimit: metricsLimit}];
-      const httpserver = nock('http://localhost:9070')
-        .post('/v1/data')
-        .reply(204, function (uri, requestBody) {
-          assert.deepEqual(requestBody, expected);
-          done();
-        });
-      nri.init(null, config, emitter, util);
-      emitter.emit('flush', timestamp, metrics);
-      assert.equal(httpserver.isDone(), true);
-    });
-
     it('nomad telemetry', function (done) {
       const emitter = new events.EventEmitter();
       const config = Object.assign({}, defaultConfig);
@@ -177,7 +159,7 @@ describe('New Relic Infrastructure StatsD Backend', function () {
       }];
       const metrics = {
         gauges: {
-          'nomad.client.allocs.cpu.total_percent.job-a.task-group-b.xxx-yyy.task-a.ip-foo-bar': 0.58028,
+          'nomad.client.allocs.cpu.total_percent.job-a.task-group-a.xxx-yyy.task-a.ip-foo-bar': 0.58028,
           'nomad.client.allocs.cpu.total_percent.job-b.task-group-b.yyy-zzz.task-b.ip-foo-bar': 0.026463
         }
       };
@@ -210,6 +192,63 @@ describe('New Relic Infrastructure StatsD Backend', function () {
         }
       ];
 
+      const httpserver = nock('http://localhost:9070')
+        .post('/v1/data')
+        .reply(204, function (uri, requestBody) {
+          assert.deepEqual(requestBody, expected);
+          done();
+        });
+      nri.init(null, config, emitter, util);
+      emitter.emit('flush', timestamp, metrics);
+      assert.equal(httpserver.isDone(), true);
+    });
+
+    it('limit of keys exceeded', function (done) {
+      const emitter = new events.EventEmitter();
+      const config = Object.assign({}, defaultConfig);
+      const metricsLimit = 2;
+      config.newrelic.rules = [{
+        matchExpression: '.*redis.*',
+        metricSchema: '{app}.{service}.{metricName}',
+        entityType: 'Redis Cluster',
+        entityName: 'Production Host1',
+        eventType: 'RedisSample'
+      }];
+      config.newrelic.metricsLimit = metricsLimit;
+      const metrics = {
+        gauges: {'myapp.redis.my_gauge': 1},
+        counters: {'myapp.redis.my_counter': 10},
+        counter_rates: {'myapp.redis.my_counter': 1},
+        timer_data: {
+          'myapp.redis.my_timer': {
+            sum: 10,
+            mean: 10
+          }
+        }
+      };
+      const expected = defaultIntegration;
+      expected.metrics = [
+        {
+          event_type: 'StatsdLimitErrorSample',
+          numberOfMetrics: 3,
+          configuredLimit: metricsLimit
+        },{
+          event_type: 'StatsdLimitErrorSample',
+          numberOfMetrics: 3,
+          configuredLimit: metricsLimit
+        },{
+          event_type: 'StatsdLimitErrorSample',
+          numberOfMetrics: 3,
+          configuredLimit: metricsLimit
+        },{
+          event_type: 'StatsdLimitErrorSample',
+          numberOfMetrics: 3,
+          configuredLimit: metricsLimit
+        },{
+          event_type: 'StatsdLimitErrorSample',
+          numberOfMetrics: 3,
+          configuredLimit: metricsLimit
+        }];
       const httpserver = nock('http://localhost:9070')
         .post('/v1/data')
         .reply(204, function (uri, requestBody) {
