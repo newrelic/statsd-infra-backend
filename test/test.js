@@ -160,7 +160,8 @@ describe('New Relic Infrastructure StatsD Backend', function () {
       const metrics = {
         gauges: {
           'nomad.client.allocs.cpu.total_percent.job-a.task-group-a.xxx-yyy.task-a.ip-foo-bar': 0.58028,
-          'nomad.client.allocs.cpu.total_percent.job-b.task-group-b.yyy-zzz.task-b.ip-foo-bar': 0.026463
+          'nomad.client.allocs.cpu.total_percent.job-b.task-group-b.yyy-zzz.task-b.ip-foo-bar': 0.026463,
+          'nomad.client.allocs.cpu.user.job-b.task-group-b.yyy-zzz.task-b.ip-foo-bar': 0.01
         }
       };
       const expected = defaultIntegration;
@@ -188,6 +189,7 @@ describe('New Relic Infrastructure StatsD Backend', function () {
           taskGroupName: "task-group-b",
           allocationID: "yyy-zzz",
           taskName: "task-b",
+          user: 0.1,
           total_percent: 0.026463
         }
       ];
