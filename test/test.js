@@ -6,6 +6,32 @@ const nri = require('../lib/newrelic-infra.js');
 const util = require('util');
 const nock = require('nock');
 
+describe('Unit testing indexForMetric', function () {
+
+  it('indexes a metric by all the attributes except the value field', function(done){
+    let fields = {
+      "app": "foo",
+      "client": "bar",
+      "foo": 0.13
+    };
+
+    assert.equal(nri.indexForMetric(fields, "foo"), "app=foo;client=bar");
+    done();
+  });
+
+  it('indexes by sorting alphabetically', function(done){
+    let fields = {
+      "client": "bar",
+      "app": "foo",
+      "foo": 0.13
+    };
+
+    assert.equal(nri.indexForMetric(fields, "foo"), "app=foo;client=bar");
+    done();
+  });
+
+});
+
 describe('New Relic Infrastructure StatsD Backend', function () {
   before(function () {
     nock.disableNetConnect();
@@ -85,30 +111,14 @@ describe('New Relic Infrastructure StatsD Backend', function () {
       const expected = defaultIntegration;
       expected.metrics = [
         {
-          "app": "myapp",
           "event_type": "RedisSample",
+          "app": "myapp",
+          "service": "redis",
           "my_counter": 10,
-          "service": "redis"
-        }, {
-          "app": "myapp",
-          "event_type": "RedisSample",
           "my_counterPerSecond": 1,
-          "service": "redis"
-        }, {
-          "app": "myapp",
-          "event_type": "RedisSample",
-          "my_timer.sum": 10,
-          "service": "redis"
-        }, {
-          "app": "myapp",
-          "event_type": "RedisSample",
-          "my_timer.mean": 10,
-          "service": "redis"
-        }, {
-          "app": "myapp",
-          "event_type": "RedisSample",
           "my_gauge": 1,
-          "service": "redis"
+          "my_timer.mean": 10,
+          "my_timer.sum": 10,
         }
       ];
 
@@ -159,9 +169,9 @@ describe('New Relic Infrastructure StatsD Backend', function () {
       }];
       const metrics = {
         gauges: {
-          'nomad.client.allocs.cpu.total_percent.job-a.task-group-a.xxx-yyy.task-a.ip-foo-bar': 0.58028,
-          'nomad.client.allocs.cpu.total_percent.job-b.task-group-b.yyy-zzz.task-b.ip-foo-bar': 0.026463,
-          'nomad.client.allocs.cpu.user.job-b.task-group-b.yyy-zzz.task-b.ip-foo-bar': 0.01
+           'nomad.client.allocs.cpu.total_percent.job-a.task-group-a.xxx-yyy.task-a.ip-foo-bar': 0.58028
+          ,'nomad.client.allocs.cpu.total_percent.job-b.task-group-b.yyy-zzz.task-b.ip-foo-bar': 0.026463
+          ,'nomad.client.allocs.cpu.foo_bar_baz_q.job-b.task-group-b.yyy-zzz.task-b.ip-foo-bar': 0.01
         }
       };
       const expected = defaultIntegration;
@@ -189,7 +199,7 @@ describe('New Relic Infrastructure StatsD Backend', function () {
           taskGroupName: "task-group-b",
           allocationID: "yyy-zzz",
           taskName: "task-b",
-          user: 0.1,
+          foo_bar_baz_q: 0.01,
           total_percent: 0.026463
         }
       ];
@@ -232,23 +242,7 @@ describe('New Relic Infrastructure StatsD Backend', function () {
       expected.metrics = [
         {
           event_type: 'StatsdLimitErrorSample',
-          numberOfMetrics: 3,
-          configuredLimit: metricsLimit
-        },{
-          event_type: 'StatsdLimitErrorSample',
-          numberOfMetrics: 3,
-          configuredLimit: metricsLimit
-        },{
-          event_type: 'StatsdLimitErrorSample',
-          numberOfMetrics: 3,
-          configuredLimit: metricsLimit
-        },{
-          event_type: 'StatsdLimitErrorSample',
-          numberOfMetrics: 3,
-          configuredLimit: metricsLimit
-        },{
-          event_type: 'StatsdLimitErrorSample',
-          numberOfMetrics: 3,
+          numberOfMetrics: 8,
           configuredLimit: metricsLimit
         }];
       const httpserver = nock('http://localhost:9070')
