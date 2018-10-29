@@ -64,6 +64,7 @@ New Relic Infrastructure account.
   [this](https://github.com/conventional-changelog/standard-version#release-as-a-target-type-imperatively-like-npm-version)
   too see all the different options for this command.
 - Run `git push --follow-tags origin master && npm publish` to publish the package
+- Create the github release pointing to the tag created by `npm run release`
 
 ## License
 
