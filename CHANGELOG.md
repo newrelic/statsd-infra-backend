@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## 1.0.3
 ### Fixed
-- Fix security vulnerabilities 
+- Fix `lodash` and `lodash.template` security vulnerabilities
 
 ## 1.0.2
 - Fix metrics overlapping buffer by appending events
