@@ -1,5 +1,7 @@
 [![New Relic Community Plus header](https://raw.githubusercontent.com/newrelic/open-source-office/master/examples/categories/images/Community_Plus.png)](https://opensource.newrelic.com/oss-category/#community-plus)
 
+>⚠️ This repository is no longer actively maintained. Please refer to [New Relic StatsD integration](https://github.com/newrelic/nri-statsd). 
+
 # StatsD backend for sending metrics to New Relic
 
 ## Requirements
